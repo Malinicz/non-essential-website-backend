@@ -1,10 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
-func (app *application) Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, world from %s", app.Domain)	
-} 
+func (app *application) AllFans(w http.ResponseWriter, r *http.Request) {
+	emails, err := app.DB.AllFans()
+
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, emails)
+}
